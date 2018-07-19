@@ -30,7 +30,6 @@
 
 (cyanide-view-simple
  :id 'cyanide-treemacs-view
- :display-name "cyanide-treemacs-view"
  :teardown-hook '((lambda ()
                     (progn
                       (when (and (bound-and-true-p cyanide-treemacs-window)
@@ -84,7 +83,7 @@
           (if empty-workspace?
               (progn
                 (goto-char (point-min))
-l                (treemacs--reset-index))
+                (treemacs--reset-index))
             (goto-char (point-max))
             (if (treemacs-current-button)
                 (insert "\n\n")
