@@ -17,7 +17,7 @@
 (require 'treemacs-workspaces)
 (require 'treemacs-visuals)
 (require 'cyanide-project)
-(require 'cyanide-view)
+(require 'cyanide-view-simple)
 
 (eval-and-compile
   (require 'cl-lib)
@@ -28,42 +28,16 @@
   treemacs--expand-root-node
   treemacs--add-root-element)
 
-(cyanide-view
+(cyanide-view-simple
  :id 'cyanide-treemacs-view
  :display-name "cyanide-treemacs-view"
  :teardown-hook '((lambda ()
                     (progn
-                      (setq split-height-threshold split-height-threshold-orig)
-                      (setq split-width-threshold split-width-threshold-orig)
                       (when (and (bound-and-true-p cyanide-treemacs-window)
                                  (window-live-p cyanide-treemacs-window))
-                        (delete-window cyanide-treemacs-window))
-                      (setq frame-title-format
-                            (cyanide-project-and-views-frame-title)))))
+                        (delete-window cyanide-treemacs-window)))))
  :load-hook '((lambda ()
                 (progn
-                  (setq frame-title-format
-                        (cyanide-project-and-views-frame-title))
-                  ;; Prevent annoying emacs habit of splitting
-                  ;; windows without prompting from the user.
-                  ;; Remember original values so that they can
-                  ;; be restored when the view is torn down.
-                  (setq split-height-threshold-orig
-                        split-height-threshold)
-                  (setq split-width-threshold-orig
-                        split-width-threshold)
-                  (setq split-height-threshold 80)
-                  (setq split-width-threshold 9999)
-                  (if (bound-and-true-p cyanide-current-project)
-                      (cyanide-render-menu-with-tasks cyanide-current-project
-                                                      'cyanide-default-menu-with-tasks)
-                    (cyanide-menu-render (cyanide-get-one-by-slot 'cyanide-default-menu
-                                                                  cyanide-menu-item-collection
-                                                                  ":id"
-                                                                  'eq)
-                                         'cyanide-default-menu
-                                         cyanide-mode-map))
-                  (cd-proj-root)
                   (call-interactively 'treemacs)
                   (setq cyanide-treemacs-window (selected-window))
                   (set-window-dedicated-p cyanide-treemacs-window t)
@@ -110,7 +84,7 @@
           (if empty-workspace?
               (progn
                 (goto-char (point-min))
-                (treemacs--reset-index))
+l                (treemacs--reset-index))
             (goto-char (point-max))
             (if (treemacs-current-button)
                 (insert "\n\n")
